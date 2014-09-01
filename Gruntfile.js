@@ -44,7 +44,7 @@ module.exports = function (grunt) {
                 tasks: ['coffee:test', 'test:watch']
             },
             jade: {
-                files: ['<%= config.app %>/{,*/}*.jade'],
+                files: ['<%= config.app %>/{,*/}{,*/}*.jade'],
                 tasks: ['jade']
             },
             gruntfile: {
@@ -464,9 +464,9 @@ module.exports = function (grunt) {
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
-        // 'concat',
-        // 'cssmin',
-        // 'uglify',
+        'concat',
+        'cssmin',
+        'uglify',
         'copy:dist',
         'rev',
         'usemin',
