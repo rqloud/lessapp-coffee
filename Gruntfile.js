@@ -43,6 +43,10 @@ module.exports = function (grunt) {
                 files: ['test/spec/{,*/}*.{coffee,litcoffee,coffee.md}'],
                 tasks: ['coffee:test', 'test:watch']
             },
+            jade: {
+                files: ['<%= config.app %>/{,*/}*.jade'],
+                tasks: ['jade']
+            },
             gruntfile: {
                 files: ['Gruntfile.js']
             },
@@ -59,7 +63,8 @@ module.exports = function (grunt) {
                     livereload: '<%= connect.options.livereload %>'
                 },
                 files: [
-                    '<%= config.app %>/{,*/}*.html',
+                    // '<%= config.app %>/{,*/}*.html',
+                    '.tmp/{,*/}*.html',
                     '.tmp/styles/{,*/}*.css',
                     '.tmp/scripts/{,*/}*.js',
                     '<%= config.app %>/images/{,*/}*'
@@ -173,6 +178,23 @@ module.exports = function (grunt) {
                 }]
             }
         },
+
+        // Compiles Jade to HTML
+        jade: {
+            dist: {
+                options: {
+                    pretty: true
+                },
+                files: [{
+                    expand: true,
+                    cwd: '<%= config.app %>',
+                    dest: '.tmp',
+                    src: '*.jade',
+                    ext: '.html'
+                }]
+            }
+        },
+
         // Compiles LESS to CSS and generates necessary files if requested
         less: {
             options: {
@@ -255,7 +277,8 @@ module.exports = function (grunt) {
             options: {
                 dest: '<%= config.dist %>'
             },
-            html: '<%= config.app %>/index.html'
+            // html: '<%= config.app %>/index.html'
+            html: '.tmp/index.html',
         },
 
         // Performs rewrites based on rev and the useminPrepare configuration
@@ -304,7 +327,8 @@ module.exports = function (grunt) {
                 },
                 files: [{
                     expand: true,
-                    cwd: '<%= config.dist %>',
+                    // cwd: '<%= config.dist %>',
+                    cwd: '.tmp',
                     src: '{,*/}*.html',
                     dest: '<%= config.dist %>'
                 }]
@@ -381,14 +405,17 @@ module.exports = function (grunt) {
             server: [
                 'less:server',
                 'coffee:dist',
+                'jade',
                 'copy:styles'
             ],
             test: [
                 'coffee',
+                'jade',
                 'copy:styles'
             ],
             dist: [
                 'coffee',
+                'jade',
                 'less:dist',
                 'copy:styles',
                 'imagemin',
@@ -437,9 +464,9 @@ module.exports = function (grunt) {
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
-        'concat',
-        'cssmin',
-        'uglify',
+        // 'concat',
+        // 'cssmin',
+        // 'uglify',
         'copy:dist',
         'rev',
         'usemin',
